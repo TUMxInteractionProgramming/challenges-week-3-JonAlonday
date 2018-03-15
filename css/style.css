@@ -1,5 +1,32 @@
 /* #4 #sweat #external css file */
 
+/* #5 Split screen layout. DIV separation of channels and chat area*/
+#channels, #chat {
+  height: 100%;
+  position: absolute;
+  /* #5 Canalize your channels and messages
+    Used flex property to enable scroll and bottom align the tab-bar
+    and chat-bar.
+    I've discoverd that by using flex it does a better job at displaying
+    the scroll feature of the channels and container-messages.
+    Unlike with absolute positioning of the tab-bar and chat-bar at the bottom
+    where it blocks(from view) the end of the scrollable content.
+    (blocks the view of the last channel or message)*/
+  display: flex;
+  flex-direction: column;
+}
+
+#channels {
+  width: 40%;
+  left: 0;
+}
+
+#chat {
+  width: 60%;
+  right: 0;
+}
+
+
 /* GLOBAL */
 
 /* #4 #global styles*/
@@ -12,6 +39,7 @@
     margin: 0;
     padding: 0;
 }
+
 
 body {
     background-color: #F5F5F5;
@@ -27,9 +55,61 @@ button, strong {
 /* APP BAR */
 
 /* #4 #sweat address both #app-bar s */
-h1 {
-    background-color: #3F51B5;
-    color: white;
+
+/*Material Design
+On the example app image it looks like they used the 56dp height but the
+instructions said to pick the desktop material design so I've used 64dp.
+Tablet/Desktop:
+App bar height: 64dp
+Incremental keyline is set by the app bar height, with a height of 64dp,
+which determines the keyline increment.
+App bar left and right content padding: 16dp
+App bar icon top and bottom padding: 20dp
+*/
+
+.app-bar {
+  background-color: #3F51B5;
+  color: white;
+  /* #5 app-bars positioning properties*/
+  font-size: 20px;
+  font-weight: normal;
+  position: relative;
+  /* #5 Used min-height property to prevent channel list and messages lists
+    from eating its space.*/
+  min-height: 64px;
+}
+/* #5 To position app icon*/
+#channels-app-bar img {
+  position: absolute;
+  left: 20px;
+  bottom: 0px;
+}
+/* #5 To position app title and channel title*/
+.app-bar > span {
+  position: absolute;
+  padding: 20px 0
+}
+/* #5 To left-align app title*/
+#channels-app-bar > span {
+  left: 72px;
+}
+/* #5 To left-align channel title*/
+#chat-app-bar > span {
+  left: 16px;
+}
+/* #6 channel switcher, set the p element #channel-name to inline*/
+#channel-name {
+  display: inline;
+}
+/* #6 change a font color to white*/
+.app-bar a {
+  color: white;
+}
+/* #6 Liking chnnels, Add a field to the very right*/
+#channel-star {
+  position: absolute;
+  right: 16px;
+  padding: 20px 0;
 }
 
 
@@ -41,6 +121,9 @@ ul {
     background-color: white;
     /* #3 #channels #bullets removed */
     list-style-type: none;
+    /* #5 To enable scrolling on channel lists*/
+    overflow: auto;
+    height: 100%;
 }
 
 li {
@@ -51,6 +134,8 @@ li {
     font-size: 16px;
     /* #4 #channel tiles are separated by #lines */
     border-bottom: 1px solid #F5F5F5;
+    /* #5 position icon right and vertically center the images*/
+    position: relative;
 }
 
 /* #4 active #channel is #highlighted */
@@ -59,31 +144,44 @@ li.selected {
     border-left: 4px solid #3F51B5;
 }
 
-li img {
-    /* #4 #middle vertical alignment of icons in the #channels list */
-    vertical-align: middle;
+/* #5 position icon right and vertically center the images*/
+li span {
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: 12px 0;
 }
 
-/* TAB BAR */
+/* TAB BAR and CHAT-BAR*/
 
 /* #4 #sweat #tab-bar */
-#tab-bar {
+
+/* #5 add styles to #tab-bar and chat-bar */
+#tab-bar, #chat-bar {
     /* #3 #tab-bar #container should be white */
     background-color: white;
     /* #3 #tab-bar #container has all buttons centered */
     text-align: center;
+    /* #5 Used min-height property to prevent channel list and container-messages
+    from pushing tab bar and chat-bar pass 100% browser height.*/
+    min-height: 72px;
+    /* #5 Picking up tab bar, used flex property*/
+    display: flex;
 }
 
 /* #4 add styles to #tab-bar #buttons */
-#tab-bar button {
+
+/* #5 add styles to #tab-bar's and emojis' button */
+#tab-bar button, #emojis-button {
     background-color: white;
     border: none;
     font-size: 13px;
-
-    /* #4 #tab-bar buttons have a width of #one-third of the available space */
-    width: 33%;
     height: 72px;
     padding: 16px;
+    /* #4 #tab-bar buttons have a width of #one-third of the available space */
+    width: 33%;
+    /* #5 Picking up tab bar, distributing white space equally*/
+    flex: 1;
 }
 
 /* #4 #tab-bar buttons do have a #line-break and images are centered due to the left&right auto margin */
@@ -98,9 +196,38 @@ li img {
     border-bottom: 4px solid #3F51B5;
 }
 
+/* #5 Overriding tab-bar button styling. Position it to the left and
+reset flexbox-property*/
+#emojis-button {
+  /* #5 used only this property as it also positions the button to the very left.*/
+  flex: 0;
+}
+
+/* #5 Style those emojis*/
+#emojis {
+  background-color: white;
+  border: 1px solid black;
+  height: 300px;
+  width: 300px;
+  text-align: left;
+  font-size: 28px;
+  overflow: auto;
+  position: absolute;
+  padding: 16px;
+  left: 16px;
+  bottom: 55px;
+  display: none;
+}
 
 /* MESSAGES */
 /* #4 select #specific #messages by class and re-assign element styles according to their #hierarchy in a nested way */
+
+/*  #5 To enable scrolling on Messages*/
+.container-messages {
+  overflow: auto;
+  height: 100%;
+}
+
 .message {
     /* #3 #chat #width*/
     width: 80%;
@@ -110,21 +237,36 @@ li img {
 
     /* #4 #message distance to next message container*/
     margin-bottom: 8px;
+
+    /* #5 reposition the +5 min button*/
+    position: relative;
 }
 
 
 .message h3 {
     font-size: medium;
+
+    /* #5 Distribute metadata contents evenly and bottom align it using flex*/
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
 }
 
 .message h3 em {
     font-size: larger;
     font-style: normal;
+
+    /* #5 Let all dates appear in one column*/
+    width: 30%;
+    text-align: right;
 }
 
 .message h3 a {
     /* #3 #chat #link color is primary text */
     color: black;
+
+    /* #5 Let all dates appear in one column*/
+    width: 40%;
 }
 
 .message p {
@@ -136,10 +278,13 @@ li img {
     background-color: #CDDC39;
     color: black;
     text-transform: uppercase;
+    /* #5 reposition the +5 min button*/
+    position: absolute;
+    bottom: 8px;
+    right: 8px;
 }
 
 /* #4 left align own #messages using #margins */
 .message.own {
     margin-left: 17.5%;
 }
-
